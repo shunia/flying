@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="me.shunia.tcpip.http.HttpServer"/>
+    <classEntry path="me.shunia.tcpip.lib.Server"/>
+    <classEntry path="me.shunia.tcpip.lib.Client"/>
+    <classEntry path="me.shunia.tcpip.lib.ServerConnection"/>
+    <classEntry path="me.shunia.tcpip.lib.IServerConnection"/>
+    <classEntry path="me.shunia.tcpip.http.HttpConnection"/>
+    <classEntry path="me.shunia.tcpip.http.HttpRequest"/>
+    <classEntry path="me.shunia.tcpip.http.HttpResponse"/>
+    <classEntry path="me.shunia.tcpip.http.HttpHeader"/>
+    <classEntry path="me.shunia.tcpip.http.HttpEnum"/>
+    <classEntry path="me.shunia.tcpip.http.HttpUtil"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
