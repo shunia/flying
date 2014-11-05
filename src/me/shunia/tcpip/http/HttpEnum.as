@@ -5,7 +5,7 @@ package me.shunia.tcpip.http
 		
 		public static const CRLF:String = "\r\n";
 		
-		public static const SPACER:String = " ";
+		public static const SP:String = " ";
 		
 		public static const SEPERATER:String = ";";
 		
