@@ -16,6 +16,7 @@
     <classEntry path="me.shunia.tcpip.http.HttpMessage"/>
     <classEntry path="me.shunia.tcpip.http.HttpRequestHeader"/>
     <classEntry path="me.shunia.tcpip.http.HttpResponseHeader"/>
+    <classEntry path="me.shunia.tcpip.ObjectUtils"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

@@ -9,18 +9,27 @@ package me.shunia.tcpip.http
 		
 		public function HttpRequest(source:Socket, reqString:String)
 		{
-			super(source, reqString);
+			super(source);
 			_requestStr = reqString;
-			_header = new HttpHeader(_requestStr);
+			
+			_header = new HttpRequestHeader(this);
+		}
+		
+		public function get(key:String):String {
+			return _header ? _header.get(key) : "";
+		}
+		
+		public function get raw():String {
+			return _requestStr;
 		}
 		
 		/**
-		 * Implements of toString method to output raw string content for this request.
+		 * output raw string content for this request.
 		 *  
 		 * @return 
 		 */		
 		override public function toString():String {
-			return _requestStr;
+			return raw;
 		}
 		
 		public function dispose():void {

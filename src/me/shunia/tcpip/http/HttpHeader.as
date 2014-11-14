@@ -1,5 +1,6 @@
 package me.shunia.tcpip.http
 {
+	import flash.utils.Dictionary;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
 	
@@ -8,15 +9,20 @@ package me.shunia.tcpip.http
 	/**
 	 * @author 庆峰
 	 */	
-	public class HttpHeader extends Proxy
+	public dynamic class HttpHeader extends Proxy
 	{
 		
-		protected var _params:Object = null;
+		/**
+		 * Hold the message instance. 
+		 */		
+		protected var _message:HttpMessage = null;
 		
-		protected var _exports:Object = null;
+		protected var _params:Object = {};
+		protected var _exports:Dictionary = new Dictionary();
 		
-		public function HttpHeader(params:Object = null)
+		public function HttpHeader(message:HttpMessage)
 		{
+			_message = message;
 		}
 		
 		/**
@@ -91,8 +97,8 @@ package me.shunia.tcpip.http
 		}
 		
 		override flash_proxy function getProperty(name:*):* {
-			return _params && _params.hasOwnProperty(String(name).toLowerCase()) ? 
-				_params[String(name).toLowerCase()] : 
+			return hasProperty(name) ? 
+				_params[String(name)] : 
 				"";
 		}
 		
@@ -113,11 +119,11 @@ package me.shunia.tcpip.http
 		}
 		
 		override flash_proxy function hasProperty(name:*):Boolean {
-			return _params && (_params.hasOwnProperty(name) || _params.hasOwnProperty(String(name).toLowerCase()));
+			return _params && (_params.hasOwnProperty(name));
 		}
 		
 		public function toString():String {
-			return _requestHeaderStr;
+			return "";
 		}
 		
 	}

@@ -3,10 +3,9 @@ package me.shunia.tcpip.http
 	import flash.net.Socket;
 	import flash.utils.ByteArray;
 
-	public class HttpResponse
+	public class HttpResponse extends HttpMessage
 	{
 		
-		private var _source:Socket = null;
 		private var _code:int = 200;
 		private var _message:String = "OK";
 		private var _header:Object = {};
@@ -14,7 +13,9 @@ package me.shunia.tcpip.http
 		
 		public function HttpResponse(source:Socket)
 		{
-			_source = source;
+			super(source);
+			
+			_header = new HttpResponseHeader();
 		}
 		
 		public function set status(value:int):void {

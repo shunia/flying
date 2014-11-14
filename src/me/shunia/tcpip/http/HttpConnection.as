@@ -34,8 +34,14 @@ package me.shunia.tcpip.http
 		
 		override public function close():void {
 			super.close();
-			_request.dispose();
-			_response.dispose();
+			if (_request) {
+				_request.dispose();
+				_request = null;
+			}
+			if (_response) {
+				_response.dispose();
+				_response = null;
+			}
 		}
 		
 	}

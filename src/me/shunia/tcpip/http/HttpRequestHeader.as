@@ -11,11 +11,9 @@ package me.shunia.tcpip.http
 	public class HttpRequestHeader extends HttpHeader
 	{
 		
-		protected var _requestHeaderStr:String = null;
-		
-		public function HttpRequestHeader(requestHeader:String=null)
+		public function HttpRequestHeader(req:HttpRequest)
 		{
-			super(requestHeader);
+			super(null);
 			
 			_requestHeaderStr = requestHeader;
 			_params = readParams(_requestHeaderStr) || {};
@@ -35,6 +33,10 @@ package me.shunia.tcpip.http
 			o["version"] = version;
 			
 			return o;
+		}
+		
+		override public function toString():String {
+			return "";
 		}
 		
 	}
