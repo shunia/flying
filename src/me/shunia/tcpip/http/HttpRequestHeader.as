@@ -13,10 +13,9 @@ package me.shunia.tcpip.http
 		
 		public function HttpRequestHeader(req:HttpRequest)
 		{
-			super(null);
+			super(req);
 			
-			_requestHeaderStr = requestHeader;
-			_params = readParams(_requestHeaderStr) || {};
+			_params = readParams(req.raw) || {};
 		}
 		
 		override protected function readHttpFirstLine(head:String):Object {

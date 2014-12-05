@@ -25,7 +25,7 @@ package me.shunia.tcpip.http
 		{
 			_source = source;
 		}
-
+		
 		/**
 		 * Message original source, which is the actual socket instance that has connected, to provide low level access to connected client. 
 		 */
@@ -40,6 +40,16 @@ package me.shunia.tcpip.http
 		public function get header():HttpHeader
 		{
 			return _header;
+		}
+		
+		/**
+		 * Get header content.
+		 *  
+		 * @param key
+		 * @return 
+		 */		
+		public function get(key:String):String {
+			return _header ? _header.get(key) : "";
 		}
 
 		/**
@@ -57,6 +67,12 @@ package me.shunia.tcpip.http
 			str += HttpEnum.CRLF;
 			str += _body ? _body.toString() : "";
 			return str;
+		}
+		
+		public function dispose():void {
+			_source = null;
+			_header = null;
+			_body = null;
 		}
 
 	}

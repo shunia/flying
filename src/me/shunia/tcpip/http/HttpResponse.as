@@ -6,16 +6,28 @@ package me.shunia.tcpip.http
 	public class HttpResponse extends HttpMessage
 	{
 		
+		private var _timeout:int = 60 * 1000;
+		
 		private var _code:int = 200;
 		private var _message:String = "OK";
-		private var _header:Object = {};
-		private var _content:ByteArray = null;
+		private var _bodyCharset:String = null;
+		private var _isHeadSent:Boolean = false;
 		
 		public function HttpResponse(source:Socket)
 		{
 			super(source);
-			
-			_header = new HttpResponseHeader();
+		}
+		
+		public function setTimeout(milisec:int):void {
+			_timeout = milisec;
+			if (_source) {
+				_source.timeout = _timeout;
+			}
+		}
+		
+		internal function init():HttpMessage {
+			_header = new HttpResponseHeader(this);
+			return this;
 		}
 		
 		public function set status(value:int):void {
@@ -25,18 +37,49 @@ package me.shunia.tcpip.http
 			}
 		}
 		
-		public function addHead(key:String, value:String):void {
-			_header[key] = value;
+		public function addHeader(key:String, value:String):void {
+			_header[key] = _header[key] || [];
+			if (_header[key].indexOf(value) == -1) {
+				_header[key].push(value);
+			}
 		}
 		
-		public function addBody(value:ByteArray):void {
-			_content = value;
+		public function removeHeader(key:String):void {
+			if (_header[key]) {
+				delete _header[key];
+			}
 		}
 		
-		public function dispose():void {
-			_source = null;
+		public function addBody(value:*, charSet:String = "utf-8"):void {
+			if (!_body) _body = new ByteArray();
+			if (!_bodyCharset) {
+				_bodyCharset = charSet;
+			}
+			
+			_body.writeBytes(value, 0, value.bytesAvailable);
 		}
 		
+		public function end():void {
+			if (_source && _source.connected) {
+				if (!_isHeadSent) {
+					writeHead();
+					_isHeadSent = true;
+				}
+				writeBody();
+				
+				_source.flush();
+			} else {
+				throw new Error("Connection has been closed, can not send any data!");
+			}
+		}
+		
+		protected function writeHead(head:Object = null):void {
+			_source.writeMultiByte(_header.toString(), _header.get("Accept-Charset") || "utf-8");
+		}
+		
+		protected function writeBody():void {
+			
+		}
 		
 		/////////////////////////////////////////
 		// 

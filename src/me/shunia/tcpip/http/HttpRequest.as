@@ -11,12 +11,11 @@ package me.shunia.tcpip.http
 		{
 			super(source);
 			_requestStr = reqString;
-			
-			_header = new HttpRequestHeader(this);
 		}
 		
-		public function get(key:String):String {
-			return _header ? _header.get(key) : "";
+		internal function init():HttpMessage {
+			_header = new HttpRequestHeader(this);
+			return this;
 		}
 		
 		public function get raw():String {
@@ -30,11 +29,6 @@ package me.shunia.tcpip.http
 		 */		
 		override public function toString():String {
 			return raw;
-		}
-		
-		public function dispose():void {
-			_source = null;
-			_header = null;
 		}
 		
 	}

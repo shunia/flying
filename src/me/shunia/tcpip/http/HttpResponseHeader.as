@@ -2,9 +2,9 @@ package me.shunia.tcpip.http
 {
 	public class HttpResponseHeader extends HttpHeader
 	{
-		public function HttpResponseHeader(requestHeader:String=null)
+		public function HttpResponseHeader(req:HttpResponse)
 		{
-			super(requestHeader);
+			super(req);
 		}
 		
 		override protected function readHttpFirstLine(head:String):Object {

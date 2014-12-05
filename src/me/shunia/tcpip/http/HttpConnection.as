@@ -7,8 +7,8 @@ package me.shunia.tcpip.http
 	public class HttpConnection extends ServerConnection
 	{
 		
-		private var _request:HttpRequest = null;
-		private var _response:HttpResponse = null;
+		private var _request:HttpMessage = null;
+		private var _response:HttpMessage = null;
 		
 		public function HttpConnection(client:Socket=null)
 		{
@@ -22,13 +22,16 @@ package me.shunia.tcpip.http
 				// read request data
 				var requestStrings:String = input.readMultiByte(input.bytesAvailable, "utf-8");
 				// parse it into HttpRequest instance
-				_request = new HttpRequest(input, requestStrings);
+				_request = new HttpRequest(input, requestStrings).init();
 				// create a new HttpResponse instance for response
-				_response = new HttpResponse(input);
-				// call back to start deal with http data, then responde to client request with reponse instance
-				if (_onData != null) {
-					_onData.apply(this, [_request, _response]);
-				}
+				_response = new HttpResponse(input).init();
+			}
+		}
+		
+		override protected function applyData():void {
+			// call back to start deal with http data, then responde to client request with reponse instance
+			if (_onData != null) {
+				_onData.apply(this, [_request, _response]);
 			}
 		}
 		

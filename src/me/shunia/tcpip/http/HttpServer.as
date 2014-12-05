@@ -28,6 +28,8 @@ package me.shunia.tcpip.http
 			if (!_server) {
 				_server = new Server(_port, _host, HttpConnection, _handler);
 			}
+			
+			trace("Http server listening on http://" + host + ":" + port);
 		}
 		
 		public function close():void {

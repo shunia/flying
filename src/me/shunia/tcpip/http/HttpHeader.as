@@ -86,6 +86,62 @@ package me.shunia.tcpip.http
 			return o;
 		}
 		
+		////////////////////////
+		//
+		// override proxy functions to accept dynamic property get/set or function call.
+		//
+		///////////////////////
+		override flash_proxy function getProperty(name:*):* {
+			return getPropertyInternal(qName(name));
+		}
+		
+		override flash_proxy function setProperty(name:*, value:*):void {
+			setPropertyInternal(qName(name), value);
+		}
+		
+		override flash_proxy function callProperty(name:*, ...args):* {
+			return callPropertyInternal(qName(name), args);
+		}
+		
+		override flash_proxy function hasProperty(name:*):Boolean {
+			return hasPropertyInternal(qName(name));
+		}
+		
+		///////////////////////
+		//
+		// internal functions to deal with property get/set and function calls.
+		// accepts name as string parameters not the QName instance
+		//
+		///////////////////////
+		protected function getPropertyInternal(name:String):* {
+			var result:String = hasPropertyInternal(name) ? _params[name] : "";
+			return result;
+		}
+		
+		protected function hasPropertyInternal(name:String):Boolean {
+			return _params && _params.hasOwnProperty(name);
+		}
+		
+		protected function setPropertyInternal(name:String, value:*):void {
+			_params && (_params[name] = value);
+		}
+		
+		protected function callPropertyInternal(name:String, ...args):* {
+			switch (name) {
+				case "get" : 
+					return getPropertyInternal(args[0]);
+					break;
+				case "add" : 
+					setPropertyInternal(args[0], args[1]);
+					return null;
+					break;
+			}
+		}
+		
+		public function toString():String {
+			return "";
+		}
+		
 		/**
 		 * To prevent empty string in http request header.
 		 *  
@@ -96,34 +152,11 @@ package me.shunia.tcpip.http
 			return str != null && str.length > 0;
 		}
 		
-		override flash_proxy function getProperty(name:*):* {
-			return hasProperty(name) ? 
-				_params[String(name)] : 
-				"";
-		}
-		
-		override flash_proxy function setProperty(name:*, value:*):void {
-			_params[name] = value;
-		}
-		
-		override flash_proxy function callProperty(name:*, ...args):* {
-			switch (name) {
-				case "get" : 
-					return getProperty(name);
-					break;
-				case "add" : 
-					setProperty(name, args);
-					return null;
-					break;
-			}
-		}
-		
-		override flash_proxy function hasProperty(name:*):Boolean {
-			return _params && (_params.hasOwnProperty(name));
-		}
-		
-		public function toString():String {
-			return "";
+		protected function qName(name:*):String {
+			if(name is QName) 
+				return name.localName;
+			else 
+				return String(name);
 		}
 		
 	}
