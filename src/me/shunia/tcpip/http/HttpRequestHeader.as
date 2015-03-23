@@ -18,8 +18,8 @@ package me.shunia.tcpip.http
 			_params = readParams(req.raw) || {};
 		}
 		
-		override protected function readHttpFirstLine(head:String):Object {
-			var o:Object = super.readHttpFirstLine(head);
+		override protected function readFirstLine(head:String):Object {
+			var o:Object = super.readFirstLine(head);
 			
 			// split with " " to seperate info in the line
 			var m:Array = head.split(HttpEnum.SP);

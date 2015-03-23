@@ -7,8 +7,8 @@ package me.shunia.tcpip.http
 			super(req);
 		}
 		
-		override protected function readHttpFirstLine(head:String):Object {
-			var o:Object = super.readHttpFirstLine(head);
+		override protected function readFirstLine(head:String):Object {
+			var o:Object = super.readFirstLine(head);
 			
 			
 			

@@ -39,7 +39,7 @@ package me.shunia.tcpip.http
 			// split by CRLF 
 			var splits:Array = str.split(HttpEnum.CRLF);
 			// The first line of http request is really special and it will be handled seperately.
-			var firstLine:Object = readHttpFirstLine(splits.shift());
+			var firstLine:Object = readFirstLine(splits.shift());
 			for (var k:String in firstLine) {
 				o[k] = firstLine[k];
 			}
@@ -62,7 +62,7 @@ package me.shunia.tcpip.http
 		 * @param head
 		 * @return 
 		 */		
-		protected function readHttpFirstLine(head:String):Object {
+		protected function readFirstLine(head:String):Object {
 			return {};
 		}
 		
