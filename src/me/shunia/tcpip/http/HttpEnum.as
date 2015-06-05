@@ -11,7 +11,11 @@ package me.shunia.tcpip.http
 		
 		public static const PAIRER:String = ",";
 		
-		public static const KV_SEPERATER:String = ":";
+		public static const KV_SEPERATER:String = ": ";
+		
+		public static const GET:String = "get";
+		
+		public static const POST:String = "post";
 		
 	}
 }

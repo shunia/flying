@@ -5,29 +5,48 @@ package me.shunia.tcpip.http
 	public class HttpRequest
 	{
 		
-		private var _source:Socket = null;
-		private var _requestStr:String = null;
-		private var _params:Object = null;
+		protected var _source:Socket = null;
+		protected var _requestStr:String = null;
+		protected var _params:Object = null;
+		protected var _header:HttpHeader = null;
+		protected var _head:HttpHead = null;
 		
 		public function HttpRequest(source:Socket, requestStr:String)
 		{
 			_requestStr = requestStr;
 			_source = source;
-			_params = readParams(requestStr);
+			read(requestStr);
 		}
 		
 		/**
 		 * Request parameters.
 		 * 
 		 * First line of http request header has been split into three final properties:</br>
-		 * 	"_http_method" stands for the request method: "GET" "POST" or other valid request method strings.</br>
-		 * 	"_http_url" stands for the request url based on the service root.It's relitive and always starts from "/".</br>
-		 * 	"_http_version" stands for the request http version.Currentlly, "HTTP/1.0" and "HTTP/1.1" are the most common ones.</br>
+		 * 	"__method__" stands for the request method: "GET" "POST" or other valid request method strings.</br>
+		 * 	"__url__" stands for the request url based on the service root.It's relitive and always starts from "/".</br>
+		 * 	"__version__" stands for the request http version.Currentlly, "HTTP/1.0" and "HTTP/1.1" are the most common ones.</br>
 		 *  
 		 * @return 
 		 */		
 		public function get params():Object {
 			return _params;
+		}
+		
+		/**
+		 * Http request head content: </br>
+		 * 
+		 *  "__method__" stands for the request method: "GET" "POST" or other valid request method strings.</br>
+		 * 	"__url__" stands for the request url based on the service root.It's relitive and always starts from "/".</br>
+		 * 	"__version__" stands for the request http version.Currentlly, "HTTP/1.0" and "HTTP/1.1" are the most common ones.</br>
+		 *  
+		 * @return 
+		 */		
+		public function get head():HttpHead {
+			return _head;
+		}
+		
+		public function get header():HttpHeader {
+			return _header;
 		}
 		
 		/**
@@ -55,27 +74,17 @@ package me.shunia.tcpip.http
 		 * @param str
 		 * @return 
 		 */		
-		protected function readParams(str:String):Object {
-			var o:Object = {};
-			
+		protected function read(str:String):void {
 			// split by CRLF 
 			var splits:Array = str.split(HttpEnum.CRLF);
 			// The first line of http request is really special and it will be handled seperately.
-			var headObject:Object = readHttpFirstLine(splits.shift());
-			for (var k:String in headObject) {
-				o[k] = headObject[k];
-			}
+			_head = new HttpHead(readHttpFirstLine(splits.shift()));
+			// http headers
+			_header = new HttpHeader();
 			// other head info
-			if (splits && splits.length > 0) {
-				for each (var line:String in splits) {
-					var lineObject:Object = readLine(line);
-					if (lineObject && lineObject["key"]) {
-						o[lineObject["key"]] = lineObject["value"];
-					}
-				}
+			while (splits.length) {
+				_header.addRawHeader(readLine(splits.shift()));
 			}
-			
-			return o;
 		}
 		
 		/**
@@ -92,9 +101,9 @@ package me.shunia.tcpip.http
 			var version:String = m[2];
 			
 			var o:Object = {};
-			o["_http_method"] = method;
-			o["_http_url"] = url;
-			o["_http_version"] = version;
+			o["__method__"] = method;
+			o["__url__"] = url;
+			o["__version__"] = version;
 			
 			return o;
 		}
@@ -102,21 +111,17 @@ package me.shunia.tcpip.http
 		/**
 		 * Read and parse every line of http request content.
 		 * 
-		 * @param line
-		 * @return 
+		 * @param line String that contains key/value pairs.
+		 * @return Key/value pairs.
 		 */		
-		protected function readLine(line:String):Object {
+		protected function readLine(line:String):Array {
 			if (!validStr(line)) return null;
 			// split with ": " to seperate the request key and value
-			var m:Array = line.split(": ");
+			var m:Array = line.split(HttpEnum.KV_SEPERATER);
 			var key:String = m[0];
 			var value:String = m[1];
 			
-			var o:Object = {};
-			o["key"] = key;
-			o["value"] = value;
-			
-			return o;
+			return [key, value];
 		}
 		
 		/**

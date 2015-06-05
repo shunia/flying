@@ -21,7 +21,7 @@ package me.shunia.tcpip.lib
 		}
 		
 		protected function onSocketData(event:ProgressEvent):void {
-			trace("Client sending data from: " + _client.remoteAddress + ":" + _client.remotePort + ", incoming data: " + event.bytesLoaded);
+			trace("Client sending data from: " + _client.remoteAddress + ":" + _client.remotePort + ", incoming data: " + event.bytesLoaded + " bytes");
 			onRead(_client);
 		}
 		

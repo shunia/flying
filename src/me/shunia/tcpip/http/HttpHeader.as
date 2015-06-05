@@ -3,27 +3,27 @@ package me.shunia.tcpip.http
 	public class HttpHeader
 	{
 		
-		private var _method:String = "GET";
-		private var _path:String = "/";
-		private var _version:String = "HTTP/1.1";
+		protected var _raw:Array = null;
 		
-		public function HttpHeader(params:String)
+		public function HttpHeader()
 		{
+			_raw = [];
 		}
 		
-		public function get method():String
-		{
-			return _method;
+		public function addRawHeader(pair:Array):void {
+			if (pair && pair.length == 2) 
+				_raw.push(pair);
 		}
-
-		public function get path():String
-		{
-			return _path;
-		}
-
-		public function get version():String
-		{
-			return _version;
+		
+		public function g(k:String):Array {
+			var arr:Array = [];
+			
+			for (var i:int = 0; i < _raw.length; i ++) {
+				if (_raw[i][0].toLowerCase() == k.toLowerCase()) 
+					arr.push(_raw[i].concat());
+			}
+			
+			return arr;
 		}
 		
 	}
